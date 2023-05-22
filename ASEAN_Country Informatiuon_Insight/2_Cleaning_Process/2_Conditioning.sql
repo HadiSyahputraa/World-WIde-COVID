@@ -15,6 +15,7 @@ WHERE location = 'Brunei' or
 	  location = 'Singapore' or
 	  location = 'Thailand' or
 	  location = 'Vietnam'
+--Checking for groupped result view
 --group by location
 
 --Adding ASEAN category
