@@ -49,7 +49,6 @@ DROP COLUMN special_group
 Create View
 ASEAN_Generall_Grouped_Info_Cle as
 SELECT  ID, special_group, location,
-		Date, Day, Month, Year,
 		reproduction_rate, stringency_index, population_density,
 		median_age, gdp_per_capita, extreme_poverty,
 		life_expectancy, human_development_index, population
@@ -66,8 +65,9 @@ WHERE location = 'Brunei' or
 	  location = 'Vietnam'
 
 Create View
-Comparison_PH_ID as
-SELECT  ID, new_tests, new_cases, new_deaths, positive_rate,	
+Comparison_Country as
+SELECT  ID, location,
+		new_tests, new_cases, new_deaths, positive_rate,	
 		total_cases, total_tests, total_deaths,	
 		new_tests_per_thousand,	total_tests_per_thousand,	
 		new_cases_per_million, new_deaths_per_million, total_deaths_per_million,
@@ -77,4 +77,5 @@ SELECT  ID, new_tests, new_cases, new_deaths, positive_rate,
 		icu_patients_per_million, hosp_patients_per_million, weekly_icu_admissions_per_million,	weekly_hosp_admissions_per_million,
 		handwashing_facilities, reproduction_rate
 FROM ASEAN_Generall..Covid_Raw_Data_Clean$
-WHERE location = 'Indonesia' or location = 'Philippines'
+WHERE location = 'Vietnam' or
+	  location = 'Philippines'
