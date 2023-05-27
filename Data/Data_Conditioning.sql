@@ -1,7 +1,5 @@
-SELECT COUNT(DISTINCT ID)
+SELECT *
 FROM ASEAN_Generall..Covid_Raw_Data_Clean$
-
-
 --=================================================================================================================
 -- ASEAN Groupping
 select COUNT(DISTINCT ID), location
@@ -45,10 +43,10 @@ alter table ASEAN_Generall..Covid_Raw_Data_Clean$
 DROP COLUMN special_group
 
 --=================================================================================================================
---Saving Table
+--Saving Table for Generall insight
 Create View
 ASEAN_Generall_Grouped_Info_Cle as
-SELECT  ID, special_group, location,
+SELECT  ID, special_group, location, Date, Day, Month, Year,
 		reproduction_rate, stringency_index, population_density,
 		median_age, gdp_per_capita, extreme_poverty,
 		life_expectancy, human_development_index, population
@@ -64,9 +62,10 @@ WHERE location = 'Brunei' or
 	  location = 'Thailand' or
 	  location = 'Vietnam'
 
+--Saving table for comparison purposes
 Create View
 Comparison_Country as
-SELECT  ID, location,
+SELECT  ID, location, Date, Day,  Month, Year, 
 		new_tests, new_cases, new_deaths, positive_rate,	
 		total_cases, total_tests, total_deaths,	
 		new_tests_per_thousand,	total_tests_per_thousand,	
@@ -79,3 +78,19 @@ SELECT  ID, location,
 FROM ASEAN_Generall..Covid_Raw_Data_Clean$
 WHERE location = 'Vietnam' or
 	  location = 'Philippines'
+
+-- CTE for easier usage of generall  info needed
+Create View
+General_Simplified as
+with PopvsVac (location, avg_population, avg_GDP, avg_HDI, avg_density)
+as
+(
+select location, AVG(population), round(AVG(gdp_per_capita), 2), round(avg(human_development_index), 2),
+	   avg(population_density)
+from  ASEAN_Generall..ASEAN_Generall_Grouped_Info_Cle
+WHERE location = 'Vietnam' or
+	  location = 'Philippines'
+group by location
+)
+select *
+from General_Simplified
