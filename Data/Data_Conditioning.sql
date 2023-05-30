@@ -74,7 +74,7 @@ SELECT  ID, location, Date, Day,  Month, Year,
 		weekly_icu_admissions, weekly_hosp_admissions,	
 		hospital_beds_per_thousand,
 		icu_patients_per_million, hosp_patients_per_million, weekly_icu_admissions_per_million,	weekly_hosp_admissions_per_million,
-		handwashing_facilities, reproduction_rate
+		handwashing_facilities, reproduction_rate, stringency_index
 FROM ASEAN_Generall..Covid_Raw_Data_Clean$
 WHERE location = 'Vietnam' or
 	  location = 'Philippines'
@@ -93,4 +93,4 @@ WHERE location = 'Vietnam' or
 group by location
 )
 select *
-from General_Simplified
+from PopvsVac
