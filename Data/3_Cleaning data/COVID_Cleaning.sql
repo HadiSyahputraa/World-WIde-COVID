@@ -62,7 +62,7 @@ WHERE location = 'Brunei' or
 	  location = 'Thailand' or
 	  location = 'Vietnam'
 
---Saving table for comparison purposes
+--Saving table for comparison purposes, covid case
 Create View
 Comparison_Country as
 SELECT  ID, location, Date, Day,  Month, Year, 
@@ -94,3 +94,42 @@ group by location
 )
 select *
 from PopvsVac
+
+--- Creating Vaccine information from given data
+create table filled_total_vaccination
+(
+ID2 numeric,
+location2 varchar(255),
+Date2 datetime,
+total_vaccinations_fill numeric,
+total_boosters_fill numeric
+)
+
+INSERT INTO filled_total_vaccination 
+	(
+	ID2, location2, Date2, 
+	total_vaccinations_fill, total_boosters_fill
+	)
+SELECT 
+	ID, location, Date, 
+	total_vaccinations, total_boosters
+FROM ASEAN_Generall..Covid_Raw_Data_Clean$
+WHERE location = 'Vietnam' or
+	  location = 'Philippines'
+
+select *
+from filled_total_vaccination
+
+create view
+filled_data as
+with filling_up as
+(
+select *,
+	count(total_vaccinations_fill) over (partition by location2 order by Date2) as VCount, 
+	count(total_boosters_fill) over (partition by location2 order by Date2) as BCount
+from filled_total_vaccination
+)
+select ID2, location2, Date2,
+	FIRST_VALUE(total_vaccinations_fill) over (partition by location2, VCount order by Date2) as filled_Total_Vaccine,
+	FIRST_VALUE(total_boosters_fill) over (partition by location2, BCount order by Date2) as filled_Booster_Vaccine
+from filling_up
